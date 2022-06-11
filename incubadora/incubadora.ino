@@ -11,7 +11,7 @@ float Erro;
 float DErro; 
 float PVanterior;
 float Saida=0;
-int setpoint=40;
+int setpoint=38;
 int i=0;
 
 // SSID e Password para o modo AP
@@ -207,20 +207,20 @@ void reconnect() {
 // ---------------------------- Trabalhando com a lógica Fuzzy ----------------------------  
  
 // CONJUNTOS DA VARIÁVEL ERRO
-FuzzySet *MN = new FuzzySet(-200, -200, -4, -2);
-FuzzySet *PN = new FuzzySet(-4, -2, -2, 0);
-FuzzySet *ZE = new FuzzySet(-2, 0, 0, 2);
-FuzzySet *PP = new FuzzySet(0,2,2,4);
-FuzzySet *MP = new FuzzySet(2, 4, 200, 200);
+FuzzySet *MN = new FuzzySet(-28, -28, -10, -5);
+FuzzySet *PN = new FuzzySet(-10, -5, 0);
+FuzzySet *ZE = new FuzzySet(-5, 0, 5);
+FuzzySet *PP = new FuzzySet(0, 5, 10);
+FuzzySet *MP = new FuzzySet(5, 10, 13, 13);
 
 // CONJUNTOS DA VARIÁVEL DELTA ERRO
-FuzzySet *MNd = new FuzzySet(-200, -200, -4, -2);
-FuzzySet *PNd = new FuzzySet(-4, -2, -2, 0);
-FuzzySet *ZEd = new FuzzySet(-2, 0, 0, 2);
-FuzzySet *PPd = new FuzzySet(0,2,2,4);
-FuzzySet *MPd = new FuzzySet(2, 4, 200, 200);
+FuzzySet *MNd = new FuzzySet(-28, -28, -10, -5);
+FuzzySet *PNd = new FuzzySet(-10, -5, 0);
+FuzzySet *ZEd = new FuzzySet(-5, 0, 5);
+FuzzySet *PPd = new FuzzySet(0, 5, 10);
+FuzzySet *MPd = new FuzzySet(5, 10, 13, 13);
 
-// CONJUNTOS DA VARIÁVEL POTÊNCIA DA BOMBA
+// CONJUNTOS DA VARIÁVEL RESISTENCIA
 FuzzySet *MB = new FuzzySet(0,0,0,25);
 FuzzySet *B = new FuzzySet(0, 25, 25, 50);
 FuzzySet *M = new FuzzySet(25, 50, 50, 75);
