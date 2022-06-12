@@ -11,11 +11,13 @@ float Erro;
 float DErro; 
 float PVanterior;
 float Saida=0;
-int setpoint=38;
+int setpoint=0;
 int i=0;
 
+int sp = 0;
+
 // SSID e Password para o modo AP
-const char *ssid_ap = "Tomada Inteligente";
+const char *ssid_ap = "Incubadora";
 const char *password_ap = "12345678";
 
 // SSID e Password para o modo Station
@@ -78,39 +80,58 @@ void setup_wifi(String ssid, String password, bool eeprom) {
         reconnect();
       }
       client.loop();
-
+      if(sp != setpoint){
+        sp = setpoint;
+        Saida = 0;
+        PV = 0;
+      }
       Erro=PV-setpoint;
-      fuzzy->setInput(1, Erro);
-      fuzzy->setInput(2, DErro);
-      fuzzy->fuzzify();
-      Saida = fuzzy->defuzzify(1);
-      Serial.println (String(PV)+";"+String(Erro)+";"+String(Saida));
-      client.publish("incubadora/PV", String(PV).c_str());
-      client.publish("incubadora/Erro", String(Erro).c_str());
-      client.publish("incubadora/Temp", String(Saida).c_str());
-      PVanterior=PV;
-      PV=0.9954*PV+0.002763*Saida;
-      DErro=PV-PVanterior;
-      i=i+1;
-      delay (300);
+      if(Erro < -0.04 || Erro > 0.04 ){
+        fuzzy->setInput(1, Erro);
+        fuzzy->setInput(2, DErro);
+        fuzzy->fuzzify();
+        Saida = fuzzy->defuzzify(1);
+        Serial.println("ERRO DIFERENTE DE ZERO");
+        Serial.println (String(PV)+";"+String(Erro)+";"+String(Saida)+";"+String(setpoint));
+        client.publish("incubadora/PV", String(PV).c_str());
+        client.publish("incubadora/Erro", String(Erro).c_str());
+        client.publish("incubadora/Temp", String(Saida).c_str());
+        PVanterior=PV;
+        PV=0.9954*PV+0.002763*Saida;
+        DErro=PV-PVanterior;
+        i=i+1;
+        delay (250);
+      }
+      else{
+        Serial.println("ERRO IGUAL DE ZERO");
+        Serial.println (String(PV)+";"+String(Erro)+";"+String(Saida)+";"+String(setpoint));
+        client.publish("incubadora/PV", String(PV).c_str());
+        client.publish("incubadora/Erro", String(Erro).c_str());
+        client.publish("incubadora/Temp", String(Saida).c_str());
+      }
     }
   }
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  char number;
+  String number = "";
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
   for (int i = 0; i < length; i++) {
-    number = (char)payload[i];
-    Serial.print(number);
-    if(number == '1')
+    number += (char)payload[i];
+    Serial.println(number);
+   /* if(number == '1')
       digitalWrite(D2, HIGH);
     else
-      digitalWrite(D2, LOW);
+      digitalWrite(D2, LOW); */
   }
+  setpoint = number.toInt();
   Serial.println();
+  Serial.println("--------------");
+  Serial.println(number);
+  Serial.println(setpoint);
+  Serial.println("--------------");
   
   String topicStr(topic);
   int bottleCount = 0;                // assume no bottles unless we correctly parse a value from the topic
@@ -192,7 +213,7 @@ void reconnect() {
       client.publish("outTopic", "hello world");
       
       client.subscribe("greenBottles/#");
-      client.subscribe("tomadaBFL/T1");
+      client.subscribe("incubadora/sp");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
