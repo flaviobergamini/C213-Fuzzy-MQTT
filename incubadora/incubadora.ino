@@ -229,16 +229,16 @@ void reconnect() {
  
 // CONJUNTOS DA VARIÁVEL ERRO
 FuzzySet *MN = new FuzzySet(-28, -28, -10, -5);
-FuzzySet *PN = new FuzzySet(-10, -5, 0);
-FuzzySet *ZE = new FuzzySet(-5, 0, 5);
-FuzzySet *PP = new FuzzySet(0, 5, 10);
+FuzzySet *PN = new FuzzySet(-10, -5, -5, 0);
+FuzzySet *ZE = new FuzzySet(-5, 0,0, 5);
+FuzzySet *PP = new FuzzySet(0, 5,5, 10);
 FuzzySet *MP = new FuzzySet(5, 10, 13, 13);
 
 // CONJUNTOS DA VARIÁVEL DELTA ERRO
 FuzzySet *MNd = new FuzzySet(-28, -28, -10, -5);
-FuzzySet *PNd = new FuzzySet(-10, -5, 0);
-FuzzySet *ZEd = new FuzzySet(-5, 0, 5);
-FuzzySet *PPd = new FuzzySet(0, 5, 10);
+FuzzySet *PNd = new FuzzySet(-10, -5,-5, 0);
+FuzzySet *ZEd = new FuzzySet(-5, 0,0, 5);
+FuzzySet *PPd = new FuzzySet(0, 5, 5,10);
 FuzzySet *MPd = new FuzzySet(5, 10, 13, 13);
 
 // CONJUNTOS DA VARIÁVEL RESISTENCIA
