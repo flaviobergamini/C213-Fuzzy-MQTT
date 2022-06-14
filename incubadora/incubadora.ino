@@ -80,6 +80,22 @@ void setup_wifi(String ssid, String password, bool eeprom) {
         reconnect();
       }
       client.loop();
+
+      if(setpoint < 30){
+        setpoint = 30;
+        client.publish("incubadora/aviso", "Coloque SP > 30");
+        delay(1000);
+        client.publish("incubadora/sp", "30");
+      }
+      else if(setpoint > 40){
+        setpoint = 40;
+        client.publish("incubadora/aviso", "Coloque SP < 40");
+        delay(1000);
+        client.publish("incubadora/sp", "40");
+      }
+      else{
+        client.publish("incubadora/aviso", "SP Toleravel");  
+      }
       
       Erro=PV-setpoint;
       fuzzy->setInput(1, Erro);
@@ -511,7 +527,7 @@ const char MAIN_page[] PROGMEM = R"=====(
 <body bgcolor="#8080ff">
   
   <h2>Incubadora<h2>
-  <h3> C2135 - 2022</h3>
+  <h3> C213 - 2022</h3>
 
   <form action="/action_page">
     SSID:<br>
